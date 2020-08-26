@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 
-// download img
+// download function
 var download = function(uri, filename, callback) {
     request.head(uri, function(err, res, body) {
         request(uri)
@@ -14,7 +14,7 @@ var download = function(uri, filename, callback) {
     })
 }
 
-// 等一下
+// time delay
 function wait(ms) {
     return new Promise(resolve => setTimeout(() => resolve(), ms))
 }
@@ -27,16 +27,17 @@ function wait(ms) {
         slowMo: 150,
     })
 
-    let url =('https://comicbus.live/online/a-13530.html?ch=1')
+    // comicUrl
+    let comicUrl =('https://comicbus.live/online/a-13530.html?ch=1')
 
     const page = await borwser.newPage()
-    await page.goto(url)
+    await page.goto(comicUrl)
     // await page.click('#next');
 
-    // Some extra delay to let images load
+    // time 1s
     await wait(1000)
 
-    // 擷取 comic pagenum 漫畫頁數
+    // 爬取 comic pagenum 漫畫頁數
     let comicPagenum = await page.evaluate(() => {
         const pagenum = document.getElementById('pagenum')
         return parseInt(pagenum.innerHTML.split('/')[1].slice(0, -1))
@@ -51,32 +52,26 @@ function wait(ms) {
         // go to url
         await page.goto(url + '-' + i)
 
-        // 篩選 圖片url
-        let imageLink = await page.evaluate(() => {
+        // 爬出 img url
+        let imageLinkurl = await page.evaluate(() => {
             const images = Array.from(document.querySelectorAll('img'))
             return images.map(img => img.src).filter(imgText => imgText.includes("8comic"))
-            // .filter(img => img.includes('https:'))
         })
 
-        // 圖片網址
-        console.log(imageLink)
+        // imgLink
+        console.log(imgLink)
 
-        // img donwload funcotion
-        imageLink.forEach((img, index) =>
+        // img funcotion
+        imgLink.forEach((img, index) =>
             download(img, i + '.jpg', function() {
-                console.log('done')
+                console.log('download done')
                 // imgname = number
             })
         )
 
-
     }
 
-
-
-    await borwser.close()
+    await borwser.close() // borwser close
 
 })();
 
-
-// document.getElementById("pagenum").innerHTML.split('/')[1].slice(0, -1)

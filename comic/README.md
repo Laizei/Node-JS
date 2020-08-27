@@ -1,4 +1,4 @@
-# NodeJS  comic crawler
+# puppeteer 8comic crawler
 
 此程式主要是透過 "puppeteer" 這個套件，來執行爬蟲的主要工作。
 

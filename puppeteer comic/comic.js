@@ -28,7 +28,7 @@ function wait(ms) {
     })
 
     // comicUrl
-    let comicUrl =('https://comicbus.live/online/a-13530.html?ch=1')
+    let comicUrl =('https://comicbus.live/online/a-10406.html?ch=1')
 
     const page = await borwser.newPage()
     await page.goto(comicUrl)
